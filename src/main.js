@@ -4,6 +4,7 @@ import App from "./App.vue";
 // 引入组件库和样式
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+import "element-plus/theme-chalk/dark/css-vars.css";
 //引入刚写好的路由设备
 import router from "./router/index.js";
 //引入Pinia
