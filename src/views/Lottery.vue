@@ -1,13 +1,20 @@
 <script setup>
 import FoodList from "../components/FoodList.vue";
-import { ref } from "vue";
+import { ref ,watch} from "vue";
 import { fetchHitokoto } from "../api/index.js";
 import { useFoodStore } from "../store/foodStore.js";
+import MyModal from "../components/MyModal.vue";
 
 
 const foodStore=useFoodStore()
 const result = ref("今天吃什么？");
 const newFood=ref("")
+const savedHistory=localStorage.getItem('myHistoryList')
+const historyList=ref(savedHistory?JSON.parse(savedHistory):[])
+const showModal=ref(false) //控制弹窗隐藏
+
+watch(historyList,(newvalue)=>{
+  localStorage.setItem('myHistoryList',JSON.stringify(newvalue))},{deep:true})
 
 const addFood=()=>{
 if(newFood.value!==""){
@@ -40,7 +47,12 @@ const pickFood = () => {
     // 抽取最终中奖结果
     let finalIndex = Math.floor(Math.random() * foodStore.foodList.length);
     result.value = foodStore.foodList[finalIndex];
-    
+    //添加抽奖记录
+    historyList.value.push(result.value)
+    if(historyList.value.length>5){
+      historyList.value.shift()
+    }
+
     // 解除锁定，允许下次抽奖
     isSpinning.value = false;
   }, 1500); // 1500 毫秒 = 1.5 秒
@@ -50,8 +62,19 @@ const deleteFood=(index)=>{
   foodStore.deleteFoodFromStore(index)
 }
 
-
-
+//点‘清空’按钮，不再是confirm，而是打开弹窗
+const cleanHistory=()=>{
+  showModal.value=true
+}
+//弹窗点确定
+const handleConfirm=()=>{
+  historyList.value=[]
+  showModal.value=false
+}
+//弹窗点取消
+const handleCancel=()=>{
+  showModal.value=false
+}
 
 // 定义一个变量存拿到的文字
 const hitokoto = ref("点击下方按钮获取今日运势")
@@ -89,6 +112,14 @@ const getHitokoto = async () => {
     <FoodList :foods="foodStore.foodList" @del="deleteFood"></FoodList>
     
     <button class="pick-btn" @click="pickFood">随机抽取！</button>
+    <div v-if="historyList.length>0">
+     <ul>
+      <li v-for="(item,index) in historyList" :key="index">第{{ index+1 }}次抽到：{{ item }}</li>
+     </ul>
+     <el-button type="danger" plain size="small" @click="cleanHistory">清空历史记录</el-button>
+     <MyModal :visible="showModal" title="再次确认" message="确定要清空所有历史记录吗？" @confirm="handleConfirm" @cancel="handleCancel"></MyModal>
+    </div>
+    <p v-else style="color: #999; font-size: 14px;">暂无记录，点击随机抽取吧！</p>
     <div style="margin-top: 40px; padding: 20px; border-top: 1px dashed #ccc;">
   <p style="color: #666; font-size: 16px;">{{ hitokoto }}</p >
   <el-button type="primary" :loading="isLoading" @click="getHitokoto">{{ isLoading?'正在获取...':'获取今日毒鸡汤' }}</el-button>
