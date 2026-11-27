@@ -1,5 +1,33 @@
-# Vue 3 + Vite
+# 🍚 赛博干饭转盘 (Vue Todo)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+这是一个基于 Vue 3 开发的现代化、响应式单页应用（SPA）。当你不知道今天吃什么，或者需要和室友决策时，只需一键，让命运帮你选择！
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+👉 **[点击这里，在线体验](https://jade-alpaca-5f5517.netlify.app)** _(把这里换成你的真实网址)_
+
+## ✨ 核心功能
+
+- **🎰 炫酷抽奖**：带有状态锁的拉霸机式滚动动画，防止用户狂点出错。
+- **📝 历史记录**：记录最近 5 次抽奖结果，并通过 `localStorage` 实现本地持久化，刷新不丢。
+- **🌙 暗黑模式**：全局动态换肤，丝滑过渡，保护夜间视力。
+- **🖼️ 随机风景**：调用外部 API 获取随机风景图，自带加载状态和错误兜底处理。
+- **🪟 自定义弹窗**：纯手工打造的通用 Modal 组件，告别丑陋的原生弹窗。
+- **📱 移动端适配**：完美兼容手机端和 PC 端。
+
+## 🛠️ 技术栈
+
+- **框架**：Vue 3 (Composition API) + Vite
+- **路由**：Vue Router 4
+- **状态管理**：Pinia
+- **UI 组件库**：Element Plus
+- **网络请求**：Axios
+- **代码规范**：ESLint + Prettier
+- **部署**：Netlify
+
+## 🚀 本地运行
+
+如果你想在本地运行这个项目，请按以下步骤操作：
+
+1. 克隆项目到本地：
+   ```bash
+   git clone https://github.com/wing-feng/vue-todo.git
+   ```
