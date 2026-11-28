@@ -5,6 +5,7 @@ import { fetchHitokoto } from "../api/index.js";
 import { useFoodStore } from "../store/foodStore.js";
 import MyModal from "../components/MyModal.vue";
 import HistoryList from "../components/HistoryList.vue";
+import Chart from "../components/Chart.vue";
 
 const foodStore = useFoodStore();
 const result = ref("今天吃什么？");
@@ -146,6 +147,7 @@ const getHitokoto = async () => {
       :history-list="historyList"
       @clear="cleanHistory"
     ></HistoryList>
+    <Chart v-if="historyList.length > 0" :history-list="historyList"></Chart>
 
     <div style="margin-top: 40px; padding: 20px; border-top: 1px dashed #ccc">
       <p style="color: #666; font-size: 16px">{{ hitokoto }}</p>
