@@ -6,6 +6,7 @@ import { useFoodStore } from "../store/foodStore.js";
 import MyModal from "../components/MyModal.vue";
 import HistoryList from "../components/HistoryList.vue";
 import Chart from "../components/Chart.vue";
+import axios from "axios";
 
 const foodStore = useFoodStore();
 const result = ref("今天吃什么？");
@@ -14,6 +15,7 @@ const savedHistory = localStorage.getItem("myHistoryList");
 const historyList = ref(savedHistory ? JSON.parse(savedHistory) : []);
 const showModal = ref(false); //控制弹窗隐藏
 const isAnimating = ref(false); //控制文字弹跳动画开关
+const weather = ref("正在获取天气..."); //定义天气变量
 
 watch(
   historyList,
@@ -113,6 +115,21 @@ const getHitokoto = async () => {
     isLoading.value = false;
   }
 };
+
+//获取天气函数
+const getWeather = async () => {
+  try {
+    const res = await axios.get("https://wttr.in/Beijing?format=j1");
+    const temp = res.data.current_condition[0].temp_C;
+    const desc = res.data.current_condition[0].weatherDesc[0].value;
+    weather.value = `今日天气：${desc},气温${temp}℃`;
+  } catch (error) {
+    console.error(error);
+    weather.value = "天气获取失败";
+  }
+};
+
+getWeather();
 </script>
 
 <template>
@@ -140,6 +157,9 @@ const getHitokoto = async () => {
     </div>
 
     <FoodList :foods="foodStore.foodList" @del="deleteFood"></FoodList>
+    <div style="color: #409eff; font-size: 14px; margin-bottom: 15px">
+      {{ weather }}
+    </div>
 
     <button class="pick-btn" @click="pickFood">随机抽取！</button>
 
