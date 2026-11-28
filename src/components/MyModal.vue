@@ -1,4 +1,6 @@
 <script setup>
+import { Teleport } from "vue";
+
 defineProps({
   visible: Boolean, // 控制显示隐藏
   title: String,
@@ -9,17 +11,19 @@ const emit = defineEmits(["confirm", "cancel"]);
 
 <template>
   <!-- 遮罩层：v-if 控制显示，点击遮罩不关闭（防手滑） -->
-  <div v-if="visible" class="modal-mask">
-    <!-- 弹窗本体 -->
-    <div class="modal-box">
-      <h3 style="margin-top: 0; color: #333">{{ title }}</h3>
-      <p style="color: #666">{{ message }}</p>
-      <div class="btn-group">
-        <el-button @click="emit('cancel')">取消</el-button>
-        <el-button type="danger" @click="emit('confirm')">确定</el-button>
+  <teleport v-if="visible" to="body">
+    <div v-if="visible" class="modal-mask">
+      <!-- 弹窗本体 -->
+      <div class="modal-box">
+        <h3 style="margin-top: 0; color: #333">{{ title }}</h3>
+        <p style="color: #666">{{ message }}</p>
+        <div class="btn-group">
+          <el-button @click="emit('cancel')">取消</el-button>
+          <el-button type="danger" @click="emit('confirm')">确定</el-button>
+        </div>
       </div>
     </div>
-  </div>
+  </teleport>
 </template>
 
 <style scoped>
