@@ -37,7 +37,7 @@ const toggleDark = () => {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  padding: 20px;
+  padding: 15px;
   background: var(--bg-color);
   border-bottom: 1px solid rgba(128, 128, 128, 0.2);
   transition: background 0.3s;

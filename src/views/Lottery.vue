@@ -12,6 +12,7 @@ const newFood = ref("");
 const savedHistory = localStorage.getItem("myHistoryList");
 const historyList = ref(savedHistory ? JSON.parse(savedHistory) : []);
 const showModal = ref(false); //控制弹窗隐藏
+const isAnimating = ref(false); //控制文字弹跳动画开关
 
 watch(
   historyList,
@@ -36,17 +37,17 @@ const pickFood = () => {
   // 如果菜单是空的，或者正在抽奖中，直接拦截
   if (foodStore.foodList.length === 0 || isSpinning.value) return;
 
-  // 1. 标记进入“抽奖中”状态
+  // 标记进入“抽奖中”状态
   isSpinning.value = true;
   result.value = "疯狂翻滚中...";
 
-  // 2. 开启定时器，每 50 毫秒换一个菜（制造闪烁特效）
+  // 开启定时器，每 50 毫秒换一个菜（制造闪烁特效）
   const timer = setInterval(() => {
     let randomIndex = Math.floor(Math.random() * foodStore.foodList.length);
     result.value = foodStore.foodList[randomIndex];
   }, 50);
 
-  // 3. 1.5 秒后停止滚动
+  // 1.5 秒后停止滚动
   setTimeout(() => {
     clearInterval(timer); // 清除定时器，停止闪烁
 
@@ -61,6 +62,13 @@ const pickFood = () => {
 
     // 解除锁定，允许下次抽奖
     isSpinning.value = false;
+
+    //触发弹跳动画
+    isAnimating.value = true;
+    //500毫秒（动画时长）后自动关闭，以便于下次开启
+    setTimeout(() => {
+      isAnimating.value = false;
+    }, 500);
   }, 1500); // 1500 毫秒 = 1.5 秒
 };
 
@@ -108,8 +116,19 @@ const getHitokoto = async () => {
 
 <template>
   <div class="app-container">
-    <h1 class="result-title">{{ result }}</h1>
-
+    <div
+      style="
+        height: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: visible;
+      "
+    >
+      <h1 class="result-title" :class="{ bounce: isAnimating }">
+        {{ result }}
+      </h1>
+    </div>
     <div class="input-group">
       <el-input
         v-model="newFood"
@@ -148,7 +167,7 @@ const getHitokoto = async () => {
 /* 整个页面的容器，限制宽度，居中显示 */
 .app-container {
   max-width: 500px;
-  margin: 60px auto;
+  margin: 20px auto;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   color: #333;
@@ -156,10 +175,14 @@ const getHitokoto = async () => {
 
 /* 抽奖结果的大标题 */
 .result-title {
-  font-size: 42px;
-  color: #e74c3c; /* 醒目的红色 */
-  margin-bottom: 30px;
-  min-height: 60px; /* 防止没字的时候页面跳动 */
+  min-height: 80px;
+  line-height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
 }
 
 /* 输入框和添加按钮的包裹层 */
@@ -228,5 +251,25 @@ const getHitokoto = async () => {
 .pick-btn:active {
   transform: scale(0.98);
   box-shadow: 0 2px 5px rgba(238, 82, 83, 0.4);
+}
+
+/* 定义果冻弹跳动画*/
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+    color: #f56c6c;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounce {
+  will-change: transform;
+  animation: bounce 0.5s ease;
+  display: inline-block;
 }
 </style>
