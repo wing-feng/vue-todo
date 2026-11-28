@@ -1,15 +1,15 @@
 <script setup>
-import {ref} from 'vue'
-const isDark=ref(false)
+import { ref } from "vue";
+const isDark = ref(false);
 //切换函数
-const toggleDark=()=>{
-  const html=document.documentElement
-  if(isDark.value){
-    html.classList.add('dark')
-  }else{
-    html.classList.remove('dark')
+const toggleDark = () => {
+  const html = document.documentElement;
+  if (isDark.value) {
+    html.classList.add("dark");
+  } else {
+    html.classList.remove("dark");
   }
-}
+};
 </script>
 <template>
   <div class="nav">
@@ -17,13 +17,14 @@ const toggleDark=()=>{
     <router-link to="/">🍚 干饭转盘</router-link>
     <router-link to="/about">👤 关于我</router-link>
     <!--加一个Element的开关组件-->
-<el-switch 
-  v-model='isDark'
-  inline-prompt
-  active-text="🌙 暗"
-  inactive-text="☀️ 亮"
-  @change="toggleDark"
-  style="margin-left:20px"></el-switch>
+    <el-switch
+      v-model="isDark"
+      inline-prompt
+      active-text="🌙 暗"
+      inactive-text="☀️ 亮"
+      @change="toggleDark"
+      style="margin-left: 20px"
+    ></el-switch>
   </div>
 
   <!-- 核心魔法：页面内容在这里动态切换！ -->

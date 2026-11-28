@@ -1,20 +1,25 @@
 <script setup>
 // 1. 接收父组件传来的数据
 const props = defineProps({
-  foods: Array
-})
+  foods: Array,
+});
 //告诉vue，准备发送一个叫‘del’的信号
-const emit=defineEmits(['del'])
+const emit = defineEmits(["del"]);
 </script>
 
 <template>
   <!-- 2. 把你剪切的 ul 贴在这里 -->
   <ul class="food-list">
-      <li v-for="(item,index) in props.foods" :key="index">
-        {{ item }}
-        <button @click="emit('del',index)" style="margin-left: 5px; color: red;cursor: pointer;">×</button>
-      </li>
-    </ul>
+    <li v-for="(item, index) in props.foods" :key="index">
+      {{ item }}
+      <button
+        @click="emit('del', index)"
+        style="margin-left: 5px; color: red; cursor: pointer"
+      >
+        ×
+      </button>
+    </li>
+  </ul>
 </template>
 
 <style scoped>
