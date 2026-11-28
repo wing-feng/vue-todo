@@ -4,6 +4,7 @@ import { ref ,watch} from "vue";
 import { fetchHitokoto } from "../api/index.js";
 import { useFoodStore } from "../store/foodStore.js";
 import MyModal from "../components/MyModal.vue";
+import HistoryList from "../components/HistoryList.vue";
 
 
 const foodStore=useFoodStore()
@@ -112,18 +113,14 @@ const getHitokoto = async () => {
     <FoodList :foods="foodStore.foodList" @del="deleteFood"></FoodList>
     
     <button class="pick-btn" @click="pickFood">随机抽取！</button>
-    <div v-if="historyList.length>0">
-     <ul>
-      <li v-for="(item,index) in historyList" :key="index">第{{ index+1 }}次抽到：{{ item }}</li>
-     </ul>
-     <el-button type="danger" plain size="small" @click="cleanHistory">清空历史记录</el-button>
-     <MyModal :visible="showModal" title="再次确认" message="确定要清空所有历史记录吗？" @confirm="handleConfirm" @cancel="handleCancel"></MyModal>
-    </div>
-    <p v-else style="color: #999; font-size: 14px;">暂无记录，点击随机抽取吧！</p>
+
+    <HistoryList :history-list="historyList" @clear="cleanHistory"></HistoryList>
+    
     <div style="margin-top: 40px; padding: 20px; border-top: 1px dashed #ccc;">
-  <p style="color: #666; font-size: 16px;">{{ hitokoto }}</p >
-  <el-button type="primary" :loading="isLoading" @click="getHitokoto">{{ isLoading?'正在获取...':'获取今日毒鸡汤' }}</el-button>
-  </div>
+     <p style="color: #666; font-size: 16px;">{{ hitokoto }}</p >
+     <el-button type="primary" :loading="isLoading" @click="getHitokoto">{{ isLoading?'正在获取...':'获取今日毒鸡汤' }}</el-button>
+    </div>
+    <MyModal :visible="showModal" title="再次确认" message="确定要清空所有历史记录吗？" @confirm="handleConfirm" @cancel="handleCancel"></MyModal>
   </div>
 
   
